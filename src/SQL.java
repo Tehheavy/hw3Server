@@ -61,4 +61,24 @@ public class SQL {
 //		System.out.println("results is:"+result);
 		return result;
 	}
+	public synchronized  boolean containsUser(String num,String pass) throws SQLException {
+		// TODO Auto-generated method stub
+//		stmt = con.createStatement();
+		PreparedStatement pstmt;;
+			pstmt = con.prepareStatement("SELECT * FROM Customers WHERE UserName = ? and PassWord = ?");
+			pstmt.setString(1, num);
+			pstmt.setString(2, pass);
+		String result ="";
+//		ResultSet rs =stmt.executeQuery("SELECT * FROM flights");
+		ResultSet rs = pstmt.executeQuery();
+		if(rs.absolute(1))
+		{
+			rs.close();
+			return true;
+			
+		}
+		return false;
+//		System.out.println("results is:"+result);
+
+	}
 }
