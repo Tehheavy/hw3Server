@@ -20,16 +20,15 @@ public class SQL {
 
 
 	}
-	public synchronized  void insert(int num,String from,String to,int distance,String price) throws SQLException {
+	public synchronized  void insert(String from,String to) throws SQLException {
 		// TODO Auto-generated method stub
 //		String result ="";
 //		ResultSet rs =stmt.executeQuery("SELECT * FROM flights");
-		PreparedStatement pstmt = con.prepareStatement("INSERT INTO Employees VALUES (?,?,?,?,?);");
-		pstmt.setInt(1, num);
-		pstmt.setString(2, from);
-		pstmt.setString(3, to);
-		pstmt.setInt(4, distance);
-		pstmt.setString(5, price);
+		PreparedStatement pstmt = con.prepareStatement("INSERT INTO Users VALUES (?,?,?);");
+		pstmt.setString(1, from);
+		pstmt.setString(2, to);
+		pstmt.setBoolean(3, false);
+
 		pstmt.executeUpdate();
 	}
 	public synchronized  String select(String num) throws SQLException {
@@ -61,13 +60,32 @@ public class SQL {
 //		System.out.println("results is:"+result);
 		return result;
 	}
-	public synchronized  boolean containsUser(String num,String pass) throws SQLException {
+	public synchronized  boolean containsUserLogin(String num,String pass) throws SQLException {
 		// TODO Auto-generated method stub
 //		stmt = con.createStatement();
 		PreparedStatement pstmt;;
-			pstmt = con.prepareStatement("SELECT * FROM Customers WHERE UserName = ? and PassWord = ?");
+			pstmt = con.prepareStatement("SELECT * FROM Users WHERE Username = ? and Password = ?");
 			pstmt.setString(1, num);
 			pstmt.setString(2, pass);
+		String result ="";
+//		ResultSet rs =stmt.executeQuery("SELECT * FROM flights");
+		ResultSet rs = pstmt.executeQuery();
+		if(rs.absolute(1))
+		{
+			rs.close();
+			return true;
+			
+		}
+		return false;
+//		System.out.println("results is:"+result);
+
+	}
+	public synchronized  boolean containsUser(String num) throws SQLException {
+		// TODO Auto-generated method stub
+//		stmt = con.createStatement();
+		PreparedStatement pstmt;;
+			pstmt = con.prepareStatement("SELECT * FROM Users WHERE Username = ?");
+			pstmt.setString(1, num);
 		String result ="";
 //		ResultSet rs =stmt.executeQuery("SELECT * FROM flights");
 		ResultSet rs = pstmt.executeQuery();

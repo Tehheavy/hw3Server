@@ -11,7 +11,7 @@ import java.sql.Statement;
 public class RequestHander extends Thread {
 	Socket clientsocket;
 	Mode curstate = Mode.NONE;
-	int portNumber=4568;
+	int portNumber=4138;
 	SQL mysql;
 	public RequestHander(Socket client,String database,String username,String password) throws SQLException {
 		super();
@@ -20,12 +20,14 @@ public class RequestHander extends Thread {
 
 	}
 	public enum Mode {
-		NONE,LOGIN,SELECT,UPDATE,REMOVE
+		NONE,LOGIN,REGISTER,UPDATE,REMOVE
 	}
 	public Mode HASHIT(String str){
 		String hashstr=str.toUpperCase();
 		if(hashstr.equals("LOGIN"))
 			return Mode.LOGIN;
+		if(hashstr.equals("REGISTER"))
+			return Mode.REGISTER;
 		return Mode.NONE;
 	}
 
@@ -42,13 +44,13 @@ public class RequestHander extends Thread {
 			String results = null;
 			String inputLine;
 			//     out.println("Press 1 to insert, 2 to select");
-			String response = "Press 1 to insert to insert into database"
-					+ "\n2 to select from database\n3 to update database\n4 to remove from database";
+			String response = "";
 			out.writeObject("Connection Established");
 			while ((inputLine = in.readLine()) != null) {
 
 				try{
 					String id = inputLine;
+					System.out.println("recieved "+id);
 					
 					String[] splited = id.split(" ");
 					Mode requestmode = HASHIT(splited[0]);
@@ -60,7 +62,7 @@ public class RequestHander extends Thread {
 							out.writeObject("invalidlogin");
 							break;
 						}
-						if(!mysql.containsUser(splited[1], splited[2]))
+						if(!mysql.containsUserLogin(splited[1], splited[2]))
 						{
 							results="user failed to login";
 							out.writeObject("invalidlogin");
@@ -80,30 +82,28 @@ public class RequestHander extends Thread {
 						//        results="Error fulfilling insert request.";
 						//       }
 						catch (NumberFormatException e) {
-							results="please enter a number next time.";
+							results="please enter a number next time.1";
 						}finally {
 							//out.writeObject(results +"\n"+response); worthless for now
 						}
 						break;
-					case SELECT:
-						curstate=Mode.NONE;
-						out.writeObject("Please enter Employee ID, or * if to see all of them.");
-						out.flush();
-						inputLine = in.readLine();
-						try {
-							results=mysql.select(inputLine);
-						} catch (SQLException e) {
-							// TODO Auto-generated catch block
-							//      e.printStackTrace();
-							results="Error fulfilling request.";
-						}catch (NumberFormatException e) {
-							results="please enter a number next time.";
-						}finally {
-
-							//       out.println(inputLine+results );
-							out.writeObject(results +"\n"+response);
-							//         out.flush();
+					case REGISTER:
+						if(splited.length!=3)
+						{
+							results="user failed to register";
+							out.writeObject("invalidregistery");
+							break;
 						}
+						if(mysql.containsUser(splited[1]))
+						{
+							results="user failed to register";
+							out.writeObject("invalidregistery");
+							break;
+						}
+						curstate=Mode.REGISTER;
+						 mysql.insert(splited[1],splited[2]);
+						 out.writeObject("acceptedregistery");
+						out.flush();
 
 
 						break;
