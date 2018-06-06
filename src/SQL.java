@@ -99,4 +99,23 @@ public class SQL {
 //		System.out.println("results is:"+result);
 
 	}
+	public synchronized  void insertOrder2(String type,String username,int ID,int CarID,String Mall,String ArrivalDate,
+			String ArrivalTime,String LeaveDate,String LeaveTime,String Email) throws SQLException {
+		// TODO Auto-generated method stub
+//		String result ="";
+//		ResultSet rs =stmt.executeQuery("SELECT * FROM flights");
+		PreparedStatement pstmt = con.prepareStatement("INSERT INTO ParkingOrders (PersonID,CarID,Type,RequestMall,ArrivalDate,ArrivalTime,LeaveDate,LeaveTime,Email,Username) VALUES (?,?,?,?,?,?,?,?,?,?);");
+		pstmt.setInt(1, ID);
+		pstmt.setInt(2, CarID);
+		pstmt.setInt(3, 2);
+		pstmt.setString(4, Mall);
+		pstmt.setString(5, ArrivalDate);
+		pstmt.setString(6, ArrivalTime);
+		pstmt.setString(7, LeaveDate);
+		pstmt.setString(8, LeaveTime);
+		pstmt.setString(9, Email);
+		pstmt.setString(10, username);
+
+		pstmt.executeUpdate();
+	}
 }

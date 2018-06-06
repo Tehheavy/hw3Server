@@ -20,7 +20,7 @@ public class RequestHander extends Thread {
 
 	}
 	public enum Mode {
-		NONE,LOGIN,REGISTER,UPDATE,REMOVE
+		NONE,LOGIN,REGISTER,ORDER,UPDATE,REMOVE
 	}
 	public Mode HASHIT(String str){
 		String hashstr=str.toUpperCase();
@@ -28,6 +28,8 @@ public class RequestHander extends Thread {
 			return Mode.LOGIN;
 		if(hashstr.equals("REGISTER"))
 			return Mode.REGISTER;
+		if(hashstr.equals("ORDER"))
+			return Mode.ORDER;
 		return Mode.NONE;
 	}
 
@@ -107,6 +109,18 @@ public class RequestHander extends Thread {
 
 
 						break;
+					case ORDER:
+						System.out.println("ORDER:");
+						for(int i =0;i<splited.length;i++)
+						{
+							System.out.print(splited[i]+" ");
+						}
+						if(splited[1].equals("2"))
+						{
+							mysql.insertOrder2(splited[1], splited[2], Integer.parseInt(splited[3]), Integer.parseInt(splited[4]),splited[5], splited[6], splited[7], splited[8], splited[9], splited[10]);
+							out.writeObject("acceptedorder");
+						}
+						break;
 					case UPDATE:
 						curstate=Mode.NONE;
 						out.writeObject("not yet implemented");
@@ -116,13 +130,14 @@ public class RequestHander extends Thread {
 						out.writeObject("not yet implemented");
 						break;
 					default:
-						out.writeObject("SERVER:\nDEFAULT\nINVALID CHOICE\nPress 1 to insert to insert into database"
-								+ "\n2 to select from database\n3 to update database\n4 to remove from database");
+						out.writeObject("SERVER:\nDEFAULT\nINVALID CHOICE\n");
 						break;
 					}
-				}catch (Exception e) {
-					out.writeObject("SERVER EXCEPTION\nINVALID CHOICE\nPress 1 to insert to insert into database"
-							+ "\n2 to select from database\n3 to update database\n4 to remove from database");
+				}catch(SQLException e){
+					out.writeObject("SERVER EXCEPTION\n"+e.getMessage());
+				}
+				catch (Exception e) {
+					out.writeObject("SERVER EXCEPTION\nINVALID CHOICE\n");
 					//      break;
 				}
 
