@@ -58,35 +58,20 @@ public class RequestHander extends Thread {
 					Mode requestmode = HASHIT(splited[0]);
 					switch(requestmode){
 					case LOGIN:
-						if(splited.length!=3)
-						{
-							results="user failed to login";
-							out.writeObject("invalidlogin");
-							break;
-						}
-						if(!mysql.containsUserLogin(splited[1], splited[2]))
-						{
-							results="user failed to login";
-							out.writeObject("invalidlogin");
-							break;
-						}
-						curstate=Mode.LOGIN;
-					//	String query = "SELECT * FROM users where UserName = '" + splited[1] + "' and PassWord = '" + splited[2] + "'";
-						out.writeObject("acceptedlogin"); //user received message for attempting to log in
-						out.flush();
 						try{
-							//   out.writeObject("PASSWORD=");
-							// String to=in.readLine(); 
-							//  mysql.insert(id, from, to, distance, price);
-							results="user successfuly logged in.";
-						}
-						//       catch (SQLException e) {
-						//        results="Error fulfilling insert request.";
-						//       }
-						catch (NumberFormatException e) {
-							results="please enter a number next time.1";
-						}finally {
-							//out.writeObject(results +"\n"+response); worthless for now
+							
+							if(splited.length==3)
+							{
+								out.writeObject(mysql.containsUserLogin(splited[1], splited[2]));
+								out.flush();
+								break;
+							}
+							else out.writeObject("0");
+							out.flush();
+							break;
+						}catch (Exception e) {
+							out.writeObject("0");
+							out.flush();
 						}
 						break;
 					case REGISTER:

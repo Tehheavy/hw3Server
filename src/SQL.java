@@ -10,7 +10,7 @@ import java.sql.SQLException;
 public class SQL {
 
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
-	static String DB_URL = "JDBC:MYSQL://cs.telhai.ac.il/studentDB_cs313313991";
+	static String DB_URL = "JDBC:MYSQL://cs.telhai.ac.il/Group_2";
 
 //	private Statement stmt;
 	private Connection con;
@@ -27,7 +27,7 @@ public class SQL {
 		PreparedStatement pstmt = con.prepareStatement("INSERT INTO Users VALUES (?,?,?);");
 		pstmt.setString(1, from);
 		pstmt.setString(2, to);
-		pstmt.setBoolean(3, false);
+		pstmt.setInt(3, 1);
 
 		pstmt.executeUpdate();
 	}
@@ -60,23 +60,23 @@ public class SQL {
 //		System.out.println("results is:"+result);
 		return result;
 	}
-	public synchronized  boolean containsUserLogin(String num,String pass) throws SQLException {
+	public synchronized  String containsUserLogin(String num,String pass) throws SQLException {
 		// TODO Auto-generated method stub
 //		stmt = con.createStatement();
 		PreparedStatement pstmt;;
 			pstmt = con.prepareStatement("SELECT * FROM Users WHERE Username = ? and Password = ?");
 			pstmt.setString(1, num);
 			pstmt.setString(2, pass);
-		String result ="";
+		String result ="0";
 //		ResultSet rs =stmt.executeQuery("SELECT * FROM flights");
 		ResultSet rs = pstmt.executeQuery();
 		if(rs.absolute(1))
 		{
+			result=Integer.toString(rs.getInt(3));
 			rs.close();
-			return true;
 			
 		}
-		return false;
+		return result;
 //		System.out.println("results is:"+result);
 
 	}

@@ -20,7 +20,7 @@ public class Sqlserver {
 				System.out.println("Connected with:"+clientSocket.toString());
 				//			SQL mysql = new SQL("JDBC:MYSQL://cs.telhai.ac.il/studentDB_cs313313991","cs313313991","NONE");
 				String database,username,password;
-				database="JDBC:MYSQL://cs.telhai.ac.il/studentDB_cs313313991";
+				database="JDBC:MYSQL://cs.telhai.ac.il/Group_2";
 				username="cs313313991";
 				password="NONE";
 				Thread handler = new Thread( new RequestHander(clientSocket,database,username,password));
