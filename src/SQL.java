@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 //import java.sql.Statement;
+import java.util.ArrayList;
 
 public class SQL {
 
@@ -117,5 +118,56 @@ public class SQL {
 		pstmt.setString(10, username);
 
 		pstmt.executeUpdate();
+	}
+	public synchronized String GetMalls() throws SQLException {
+		// TODO Auto-generated method stub
+		PreparedStatement pstmt;;
+			pstmt = con.prepareStatement("SELECT * FROM Malls");
+		String result ="";
+		ResultSet rs = pstmt.executeQuery();
+		 ResultSetMetaData metadata = rs.getMetaData();
+         int columnCount = metadata.getColumnCount();
+         
+         String value=null;
+         ArrayList<String> columns = new ArrayList<String>();
+         String columnName = metadata.getColumnName(1);
+         while (rs.next()) {
+        	 if(value==null)
+        		 value=rs.getString(columnName);
+        	 else
+                 value = value+" "+rs.getString(columnName);
+                 System.out.println(value);
+             }
+         
+         
+		return value;
+//		System.out.println("results is:"+result);
+
+	}
+	public synchronized String GetPrice(int type) throws SQLException {
+		// TODO Auto-generated method stub
+//		stmt = con.createStatement();
+		PreparedStatement pstmt;;
+			pstmt = con.prepareStatement("SELECT * FROM Prices Where parkingtype = ?");
+			pstmt.setInt(1, type);
+		ResultSet rs = pstmt.executeQuery();
+		 ResultSetMetaData metadata = rs.getMetaData();
+         int columnCount = metadata.getColumnCount();
+         
+//         String malls = null; 
+//         for (int i = 1; i < columnCount; i++) {
+//             String columnName = metadata.getColumnName(i);
+//             malls=malls+" "+columnName;
+//         }
+         float value = 0;
+         String columnName = metadata.getColumnName(2);
+         while (rs.next()) {
+        	 	value=rs.getFloat(columnName);
+             }
+        
+         
+		return String.valueOf(value);
+//		System.out.println("results is:"+result);
+
 	}
 }

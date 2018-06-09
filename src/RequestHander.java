@@ -20,7 +20,7 @@ public class RequestHander extends Thread {
 
 	}
 	public enum Mode {
-		NONE,LOGIN,REGISTER,ORDER,UPDATE,REMOVE
+		NONE,LOGIN,REGISTER,ORDER,REQUEST,UPDATE,REMOVE
 	}
 	public Mode HASHIT(String str){
 		String hashstr=str.toUpperCase();
@@ -30,6 +30,8 @@ public class RequestHander extends Thread {
 			return Mode.REGISTER;
 		if(hashstr.equals("ORDER"))
 			return Mode.ORDER;
+		if(hashstr.equals("REQUEST"))
+			return Mode.REQUEST;
 		return Mode.NONE;
 	}
 
@@ -109,6 +111,19 @@ public class RequestHander extends Thread {
 					case UPDATE:
 						curstate=Mode.NONE;
 						out.writeObject("not yet implemented");
+						break;
+					case REQUEST:
+						String items=null;
+						if(splited[1].equals("malls"))
+						{
+							items=mysql.GetMalls();
+							out.writeObject("acceptedrequest"+" "+items);
+						}
+						if(splited[1].equals("price"))
+						{
+							items=mysql.GetPrice(Integer.parseInt(splited[2]));
+							out.writeObject("acceptedrequest"+" "+items);
+						}
 						break;
 					case REMOVE:
 						curstate=Mode.NONE;
