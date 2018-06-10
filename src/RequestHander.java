@@ -125,12 +125,12 @@ public class RequestHander extends Thread {
 							items=mysql.GetMalls();
 							out.writeObject("acceptedrequest"+" "+items);
 						}
-						if(splited[1].equals("price"))
+						else if(splited[1].equals("price"))
 						{
 							items=mysql.GetPrice(Integer.parseInt(splited[2]));
 							out.writeObject("acceptedrequest"+" "+items);
 						}
-						if(splited[1].equals("complaints"))
+						else if(splited[1].equals("complaints"))
 						{
 							ArrayList<ComplaintHolder> sets=mysql.GetComplaints(splited[2]);
 							out.writeObject(sets);

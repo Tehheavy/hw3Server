@@ -176,9 +176,10 @@ public class SQL {
 
 	}
 	
-	public synchronized ArrayList<ComplaintHolder> GetComplaints(String User) throws SQLException {
+	public synchronized ArrayList<ComplaintHolder> GetComplaints(String User) {
 		// TODO Auto-generated method stub
 //		stmt = con.createStatement();
+		try{
 		PreparedStatement pstmt;;
 			pstmt = con.prepareStatement("SELECT * FROM Complaints Where username = ?");
 			pstmt.setString(1, User);
@@ -186,10 +187,15 @@ public class SQL {
 		ArrayList<ComplaintHolder> data=new ArrayList<ComplaintHolder>();
 		while(rs.next())
 		{
-			System.out.println(rs.getInt(1)+" "+rs.getString(3)+" "+rs.getTimestamp(4).toString()+" "+rs.getString(5)+" "+String.valueOf(rs.getString(6)));
-			data.add(new ComplaintHolder(String.valueOf(rs.getInt(1)),rs.getString(3),rs.getTimestamp(4).toString(),rs.getString(5),String.valueOf(rs.getString(6))));
+			System.out.println(rs.getInt(1)+" "+rs.getString(3)+" "+rs.getString(4)+" "+rs.getString(5)+" "+String.valueOf(rs.getString(6)));
+			data.add(new ComplaintHolder(String.valueOf(rs.getInt(1)),rs.getString(3),rs.getString(4),rs.getString(5),String.valueOf(rs.getString(6))));
 		}
 		return data;
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			}
+		return null;
 //		System.out.println("results is:"+result);
 
 	}
