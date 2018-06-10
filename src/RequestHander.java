@@ -20,7 +20,7 @@ public class RequestHander extends Thread {
 
 	}
 	public enum Mode {
-		NONE,LOGIN,REGISTER,ORDER,REQUEST,UPDATE,REMOVE
+		NONE,LOGIN,REGISTER,ORDER,REQUEST,UPDATE,REMOVE,COMPLAINT
 	}
 	public Mode HASHIT(String str){
 		String hashstr=str.toUpperCase();
@@ -32,6 +32,8 @@ public class RequestHander extends Thread {
 			return Mode.ORDER;
 		if(hashstr.equals("REQUEST"))
 			return Mode.REQUEST;
+		if(hashstr.equals("COMPLAINT"))
+			return Mode.COMPLAINT;
 		return Mode.NONE;
 	}
 
@@ -128,6 +130,18 @@ public class RequestHander extends Thread {
 					case REMOVE:
 						curstate=Mode.NONE;
 						out.writeObject("not yet implemented");
+						break;
+					case COMPLAINT:
+						curstate=Mode.NONE;
+						String complaint="";
+						int i=2;
+						do{
+							complaint+=splited[i]+' ';
+							i++;
+						}while(i!=splited.length);
+//						System.out.println("the complaint is:"+complaint);
+						mysql.addcomplaint(splited[1], complaint);
+						out.writeObject("acceptedcomplaint");
 						break;
 					default:
 						out.writeObject("SERVER:\nDEFAULT\nINVALID CHOICE\n");

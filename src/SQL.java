@@ -8,6 +8,8 @@ import java.sql.SQLException;
 //import java.sql.Statement;
 import java.util.ArrayList;
 
+import com.mysql.fabric.xmlrpc.base.Data;
+
 public class SQL {
 
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
@@ -169,5 +171,18 @@ public class SQL {
 		return String.valueOf(value);
 //		System.out.println("results is:"+result);
 
+	}
+	public synchronized  void addcomplaint(String username,String complaint) throws SQLException {
+		// TODO Auto-generated method stub
+//		String result ="";
+//		ResultSet rs =stmt.executeQuery("SELECT * FROM flights");
+		PreparedStatement pstmt = con.prepareStatement("INSERT INTO Complaints(username,complaint)"
+				+ " VALUES (?,?)");
+		pstmt.setString(1, username);
+		pstmt.setString(2, complaint);
+//		pstmt.setTimestamp(3,new java.sql.Timestamp( (new java.util.Date()).getTime() ));
+		
+		pstmt.executeUpdate();
+		System.out.println("added complaint");
 	}
 }
