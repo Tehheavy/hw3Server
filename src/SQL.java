@@ -10,6 +10,9 @@ import java.util.ArrayList;
 
 import com.mysql.fabric.xmlrpc.base.Data;
 
+import application.ComplaintHolder;
+
+
 public class SQL {
 
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
@@ -172,6 +175,25 @@ public class SQL {
 //		System.out.println("results is:"+result);
 
 	}
+	
+	public synchronized ArrayList<ComplaintHolder> GetComplaints(String User) throws SQLException {
+		// TODO Auto-generated method stub
+//		stmt = con.createStatement();
+		PreparedStatement pstmt;;
+			pstmt = con.prepareStatement("SELECT * FROM Complaints Where username = ?");
+			pstmt.setString(1, User);
+		ResultSet rs = pstmt.executeQuery();
+		ArrayList<ComplaintHolder> data=new ArrayList<ComplaintHolder>();
+		while(rs.next())
+		{
+			System.out.println(rs.getInt(1)+" "+rs.getString(3)+" "+rs.getTimestamp(4).toString()+" "+rs.getString(5)+" "+String.valueOf(rs.getString(6)));
+			data.add(new ComplaintHolder(String.valueOf(rs.getInt(1)),rs.getString(3),rs.getTimestamp(4).toString(),rs.getString(5),String.valueOf(rs.getString(6))));
+		}
+		return data;
+//		System.out.println("results is:"+result);
+
+	}
+	
 	public synchronized  void addcomplaint(String username,String complaint) throws SQLException {
 		// TODO Auto-generated method stub
 //		String result ="";

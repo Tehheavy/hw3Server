@@ -5,8 +5,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+
+import application.ComplaintHolder;
 
 public class RequestHander extends Thread {
 	Socket clientsocket;
@@ -125,6 +129,11 @@ public class RequestHander extends Thread {
 						{
 							items=mysql.GetPrice(Integer.parseInt(splited[2]));
 							out.writeObject("acceptedrequest"+" "+items);
+						}
+						if(splited[1].equals("complaints"))
+						{
+							ArrayList<ComplaintHolder> sets=mysql.GetComplaints(splited[2]);
+							out.writeObject(sets);
 						}
 						break;
 					case REMOVE:
