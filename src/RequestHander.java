@@ -10,7 +10,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import application.ComplaintHolder;
 
 public class RequestHander extends Thread {
 	Socket clientsocket;
@@ -132,7 +131,7 @@ public class RequestHander extends Thread {
 						}
 						else if(splited[1].equals("complaints"))
 						{
-							ArrayList<ComplaintHolder> sets=mysql.GetComplaints(splited[2]);
+							String[][] sets=mysql.GetComplaints(splited[2]);
 							out.writeObject(sets);
 						}
 						break;

@@ -10,7 +10,6 @@ import java.util.ArrayList;
 
 import com.mysql.fabric.xmlrpc.base.Data;
 
-import application.ComplaintHolder;
 
 
 public class SQL {
@@ -176,7 +175,7 @@ public class SQL {
 
 	}
 	
-	public synchronized ArrayList<ComplaintHolder> GetComplaints(String User) {
+	public synchronized String[][] GetComplaints(String User) {
 		// TODO Auto-generated method stub
 //		stmt = con.createStatement();
 		try{
@@ -184,13 +183,30 @@ public class SQL {
 			pstmt = con.prepareStatement("SELECT * FROM Complaints Where username = ?");
 			pstmt.setString(1, User);
 		ResultSet rs = pstmt.executeQuery();
-		ArrayList<ComplaintHolder> data=new ArrayList<ComplaintHolder>();
+		ArrayList<String[]> data=new ArrayList<String[]>();
 		while(rs.next())
 		{
 			System.out.println(rs.getInt(1)+" "+rs.getString(3)+" "+rs.getString(4)+" "+rs.getString(5)+" "+String.valueOf(rs.getString(6)));
-			data.add(new ComplaintHolder(String.valueOf(rs.getInt(1)),rs.getString(3),rs.getString(4),rs.getString(5),String.valueOf(rs.getString(6))));
+			String[] temp= new String[5];
+			temp[0]=String.valueOf(rs.getInt(1));
+			temp[1]=rs.getString(3);
+			temp[2]=rs.getString(4);
+			temp[3]=rs.getString(5);
+			temp[4]=String.valueOf(rs.getString(6));
+			//data.add(new ComplaintHolder(String.valueOf(rs.getInt(1)),rs.getString(3),rs.getString(4),rs.getString(5),String.valueOf(rs.getString(6))));
+			data.add(temp);
 		}
-		return data;
+		String[][] values =new String[data.size()][5];
+		for(int i=0;i<data.size();i++)
+		{
+			values[i][0]=data.get(i)[0];
+			values[i][1]=data.get(i)[1];
+			values[i][2]=data.get(i)[2];
+			values[i][3]=data.get(i)[3];
+			values[i][4]=data.get(i)[4];
+			
+		}
+		return values;
 		}
 		catch(Exception e){
 			e.printStackTrace();
