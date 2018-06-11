@@ -134,6 +134,11 @@ public class RequestHander extends Thread {
 							String[][] sets=mysql.GetComplaints(splited[2]);
 							out.writeObject(sets);
 						}
+						else if(splited[1].equals("allcomplaints"))
+						{
+							String[][] sets=mysql.GetAllComplaints();
+							out.writeObject(sets);
+						}
 						break;
 					case REMOVE:
 						curstate=Mode.NONE;

@@ -215,6 +215,40 @@ public class SQL {
 //		System.out.println("results is:"+result);
 
 	}
+	public synchronized String[][] GetAllComplaints() {
+		// TODO Auto-generated method stub
+//		stmt = con.createStatement();
+		try{
+		PreparedStatement pstmt;
+		pstmt = con.prepareStatement("SELECT * FROM Complaints");
+		ResultSet rs = pstmt.executeQuery();
+		ArrayList<String[]> data=new ArrayList<String[]>();
+		ResultSetMetaData rsmd = rs.getMetaData();
+		int columnamount=rsmd.getColumnCount();
+		while(rs.next())
+		{
+			System.out.println(rs.getInt(1)+" "+rs.getString(2)+" "+rs.getString(3)+" "+rs.getString(4)+" "+rs.getString(5)+" "+String.valueOf(rs.getString(6)));
+			String[] temp= new String[columnamount];
+			for(int i=0;i<columnamount;i++)
+				temp[i]=rs.getString(i+1);
+			data.add(temp);
+		}
+		String[][] values =new String[data.size()][columnamount];
+		for(int i=0;i<data.size();i++)
+		{
+			for(int j=0;j<columnamount;j++){
+				values[i][j]=data.get(i)[j];
+			}
+		}
+		return values;
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			}
+		return null;
+//		System.out.println("results is:"+result);
+
+	}
 	
 	public synchronized  void addcomplaint(String username,String complaint) throws SQLException {
 		// TODO Auto-generated method stub
