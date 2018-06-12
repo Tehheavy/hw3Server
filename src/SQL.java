@@ -263,4 +263,18 @@ public class SQL {
 		pstmt.executeUpdate();
 		System.out.println("added complaint");
 	}
+	public void addresponse(String complaintid, String complaint) throws SQLException {
+		// TODO Auto-generated method stub
+		System.out.println(complaint);
+		PreparedStatement pstmt;;
+		pstmt = con.prepareStatement("UPDATE Complaints"
+				+ " SET response=?"
+				+ " WHERE ID=?");
+		pstmt.setString(2, complaintid);
+		pstmt.setString(1, complaint);
+//		System.out.println(pstmt.toString());
+		pstmt.executeUpdate();
+		System.out.println("added response");
+		
+	}
 }

@@ -145,15 +145,19 @@ public class RequestHander extends Thread {
 						out.writeObject("not yet implemented");
 						break;
 					case COMPLAINT:
-						curstate=Mode.NONE;
-						String complaint="";
+						String complaint="";// is also a response 
 						int i=2;
 						do{
 							complaint+=splited[i]+' ';
 							i++;
 						}while(i!=splited.length);
-//						System.out.println("the complaint is:"+complaint);
-						mysql.addcomplaint(splited[1], complaint);
+						if(!splited[1].equals("resolve"))
+							mysql.addcomplaint(splited[1], complaint);
+						else{
+							String complaintid=splited[2];
+							mysql.addresponse(complaintid,complaint.substring(complaintid.length()+1));
+							
+						}
 						out.writeObject("acceptedcomplaint");
 						break;
 					default:
