@@ -107,9 +107,10 @@ public class RequestHander extends Thread {
 						{
 							System.out.print(splited[i]+" ");
 						}
-						if(splited[1].equals("2"))
+						if(splited[1].equals("2")||splited[1].equals("4"))
 						{
-							mysql.insertOrder2(splited[1], splited[2], Integer.parseInt(splited[3]), Integer.parseInt(splited[4]),splited[5], splited[6], splited[7], splited[8], splited[9], splited[10]);
+							mysql.insertOrder(splited[1], splited[2], Integer.parseInt(splited[3]), Integer.parseInt(splited[4]),splited[5]
+									, splited[6], splited[7], splited[8], splited[9], splited[10],splited[11]);
 							out.writeObject("acceptedorder");
 						}
 						break;

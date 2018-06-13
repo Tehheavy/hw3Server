@@ -104,15 +104,15 @@ public class SQL {
 //		System.out.println("results is:"+result);
 
 	}
-	public synchronized  void insertOrder2(String type,String username,int ID,int CarID,String Mall,String ArrivalDate,
-			String ArrivalTime,String LeaveDate,String LeaveTime,String Email) throws SQLException {
+	public synchronized  void insertOrder(String type,String username,int ID,int CarID,String Mall,String ArrivalDate,
+			String ArrivalTime,String LeaveDate,String LeaveTime,String Email,String Price) throws SQLException {
 		// TODO Auto-generated method stub
 //		String result ="";
 //		ResultSet rs =stmt.executeQuery("SELECT * FROM flights");
-		PreparedStatement pstmt = con.prepareStatement("INSERT INTO ParkingOrders (PersonID,CarID,Type,RequestMall,ArrivalDate,ArrivalTime,LeaveDate,LeaveTime,Email,Username) VALUES (?,?,?,?,?,?,?,?,?,?);");
+		PreparedStatement pstmt = con.prepareStatement("INSERT INTO ParkingOrders (PersonID,CarID,Type,RequestMall,ArrivalDate,ArrivalTime,LeaveDate,LeaveTime,Email,Username,Price) VALUES (?,?,?,?,?,?,?,?,?,?,?);");
 		pstmt.setInt(1, ID);
 		pstmt.setInt(2, CarID);
-		pstmt.setInt(3, 2);
+		pstmt.setInt(3, Integer.parseInt(type));
 		pstmt.setString(4, Mall);
 		pstmt.setString(5, ArrivalDate);
 		pstmt.setString(6, ArrivalTime);
@@ -120,7 +120,7 @@ public class SQL {
 		pstmt.setString(8, LeaveTime);
 		pstmt.setString(9, Email);
 		pstmt.setString(10, username);
-
+		pstmt.setString(11, Price);
 		pstmt.executeUpdate();
 	}
 	public synchronized String GetMalls() throws SQLException {
