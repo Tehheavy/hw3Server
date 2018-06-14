@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 //import java.sql.Statement;
 import java.util.ArrayList;
 
@@ -109,18 +111,24 @@ public class SQL {
 		// TODO Auto-generated method stub
 //		String result ="";
 //		ResultSet rs =stmt.executeQuery("SELECT * FROM flights");
-		PreparedStatement pstmt = con.prepareStatement("INSERT INTO ParkingOrders (PersonID,CarID,Type,RequestMall,ArrivalDate,ArrivalTime,LeaveDate,LeaveTime,Email,Username,Price) VALUES (?,?,?,?,?,?,?,?,?,?,?);");
+		
+		LocalDateTime testArrive=LocalDateTime.parse(ArrivalDate.toString()+"T"+ArrivalTime.toString());
+    	LocalDateTime testLeave=LocalDateTime.parse(LeaveDate.toString()+"T"+LeaveTime.toString());
+    	Timestamp time1 = Timestamp.valueOf(testArrive);
+    	Timestamp time2 = Timestamp.valueOf(testLeave);
+    	
+		PreparedStatement pstmt = con.prepareStatement("INSERT INTO ParkingOrders (PersonID,CarID,Type,RequestMall,ArriveTime,LeaveTime,Email,Username,Price) VALUES (?,?,?,?,?,?,?,?,?);");
 		pstmt.setInt(1, ID);
 		pstmt.setInt(2, CarID);
 		pstmt.setInt(3, Integer.parseInt(type));
 		pstmt.setString(4, Mall);
-		pstmt.setString(5, ArrivalDate);
-		pstmt.setString(6, ArrivalTime);
-		pstmt.setString(7, LeaveDate);
-		pstmt.setString(8, LeaveTime);
-		pstmt.setString(9, Email);
-		pstmt.setString(10, username);
-		pstmt.setString(11, Price);
+//		pstmt.setTimestamp(5, Timestamp.valueOf(ArrivalDate + " " + ArrivalTime));
+//		pstmt.setString(5, ArrivalDate);
+		pstmt.setTimestamp(5, time1);
+		pstmt.setTimestamp(6, time2);
+		pstmt.setString(7, Email);
+		pstmt.setString(8, username);
+		pstmt.setString(9, Price);
 		pstmt.executeUpdate();
 	}
 	public synchronized String GetMalls() throws SQLException {

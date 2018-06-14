@@ -166,9 +166,11 @@ public class RequestHander extends Thread {
 						break;
 					}
 				}catch(SQLException e){
+					e.printStackTrace();
 					out.writeObject("SERVER EXCEPTION\n"+e.getMessage());
 				}
 				catch (Exception e) {
+					e.printStackTrace();
 					out.writeObject("SERVER EXCEPTION\nINVALID CHOICE\n");
 					//      break;
 				}
