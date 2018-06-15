@@ -117,7 +117,7 @@ public class SQL {
     	Timestamp time1 = Timestamp.valueOf(testArrive);
     	Timestamp time2 = Timestamp.valueOf(testLeave);
     	
-		PreparedStatement pstmt = con.prepareStatement("INSERT INTO ParkingOrders (PersonID,CarID,Type,RequestMall,ArriveTime,LeaveTime,Email,Username,Price) VALUES (?,?,?,?,?,?,?,?,?);");
+		PreparedStatement pstmt = con.prepareStatement("INSERT INTO ParkingOrders (PersonID,CarID,Type,RequestMall,ArriveTime,LeaveTime,Email,Username,Price,Parked) VALUES (?,?,?,?,?,?,?,?,?,?);");
 		pstmt.setInt(1, ID);
 		pstmt.setInt(2, CarID);
 		pstmt.setInt(3, Integer.parseInt(type));
@@ -129,7 +129,18 @@ public class SQL {
 		pstmt.setString(7, Email);
 		pstmt.setString(8, username);
 		pstmt.setString(9, Price);
+		pstmt.setBoolean(10, false);
 		pstmt.executeUpdate();
+		try{
+			PreparedStatement pstmt2 = con.prepareStatement("INSERT INTO Cars (carid,parked,username) VALUES (?,?,?);");
+			pstmt2.setInt(1, CarID);
+			pstmt2.setBoolean(2, false);
+			pstmt2.setString(3, username);
+			pstmt2.executeUpdate();
+		}
+		catch(Exception e){
+			System.out.println("Car already in database");
+		}
 	}
 	public synchronized String GetMalls() throws SQLException {
 		// TODO Auto-generated method stub
