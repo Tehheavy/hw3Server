@@ -296,4 +296,50 @@ public class SQL {
 		System.out.println("added response");
 		
 	}
+	
+	
+	
+	
+	public synchronized String[][] getAvailableParking(String username) {
+		// TODO Auto-generated method stub
+//		stmt = con.createStatement();
+		try{
+		PreparedStatement pstmt;
+		pstmt = con.prepareStatement("SELECT * FROM ParkingOrders WHERE ArriveTime<CURRENT_TIMESTAMP() AND LeaveTime>CURRENT_TIMESTAMP() AND Parked=0 AND Username=?");
+		pstmt.setString(1, username);
+		ResultSet rs = pstmt.executeQuery();
+		ArrayList<String[]> data=new ArrayList<String[]>();
+		ResultSetMetaData rsmd = rs.getMetaData();
+		int columnamount=rsmd.getColumnCount();
+		while(rs.next())
+		{
+			System.out.println(rs.getInt(1)+" "+rs.getInt(2)+" "+rs.getInt(3)+" "+rs.getInt(4)+" "+rs.getString(5)+" "+rs.getString(6)+" "+
+					rs.getString(7)+" "+rs.getInt(8)+" "+rs.getTimestamp(9).toString()+" "+rs.getTimestamp(10).toString());
+					String[] temp= new String[columnamount];
+			for(int i=0;i<columnamount;i++)
+				temp[i]=rs.getString(i+1);
+			data.add(temp);
+		}
+		String[][] values =new String[data.size()][columnamount];
+		for(int i=0;i<data.size();i++)
+		{
+			for(int j=0;j<columnamount;j++){
+				values[i][j]=data.get(i)[j];
+			}
+		}
+		return values;
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			}
+		return null;
+//		System.out.println("results is:"+result);
+
+	}
+	
+	
+	
+	
+	
+	
 }
