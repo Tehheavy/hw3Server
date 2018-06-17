@@ -157,6 +157,22 @@ public class RequestHander extends Thread {
 							String[][] sets=mysql.getAvailableParking(splited[2]);
 							out.writeObject(sets);
 						}
+						else if(splited[1].equals("parkmyvehicle"))
+						{
+//							String[][] sets=mysql.getAvailableParking(splited[2]);
+							out.writeObject(mysql.parkvehicle(splited[2]));
+						}
+						else if(splited[1].equals("getmyvehicle"))
+						{
+//							String[][] sets=mysql.getAvailableParking(splited[2]);
+							out.writeObject("no implemento");
+						}
+						else if(splited[1].equals("cancelorder"))
+						{
+//							String[][] sets=mysql.getAvailableParking(splited[2]);
+							out.writeObject("no implemento");
+						}
+						
 						break;
 					case REMOVE:
 						curstate=Mode.NONE;
