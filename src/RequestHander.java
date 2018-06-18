@@ -172,6 +172,16 @@ public class RequestHander extends Thread {
 //							String[][] sets=mysql.getAvailableParking(splited[2]);
 							out.writeObject("no implemento");
 						}
+						else if(splited[1].equals("pricechange"))
+						{
+							if(mysql.insertPriceChangeRequest(splited[2], splited[3])==true){
+							out.writeObject("requestaccepted");
+							}
+							else{
+								out.writeObject("requestfailed");
+							}
+							break;
+						}
 						
 						break;
 					case REMOVE:
