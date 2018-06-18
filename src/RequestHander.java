@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.SplittableRandom;
 
 
 public class RequestHander extends Thread {
@@ -160,7 +161,11 @@ public class RequestHander extends Thread {
 						else if(splited[1].equals("parkmyvehicle"))
 						{
 //							String[][] sets=mysql.getAvailableParking(splited[2]);
-							out.writeObject(mysql.parkvehicle(splited[2]));
+							if(splited.length==4){
+//								out.writeObject("the mall is:"+splited[3]);
+								out.writeObject(mysql.parksubscribervehicle(splited[2],splited[3]));
+							}
+							else out.writeObject(mysql.parkvehicle(splited[2]));
 						}
 						else if(splited[1].equals("getmyvehicle"))
 						{
