@@ -422,6 +422,23 @@ public class SQL {
 		}
 		
 	}
+	
+	public synchronized  boolean insertPriceChangeRequest(String type,String price){
+		// TODO Auto-generated method stub
+		//		String result ="";
+		//		ResultSet rs =stmt.executeQuery("SELECT * FROM flights");
+		try{
+		PreparedStatement pstmt = con.prepareStatement("INSERT INTO PriceChange (parkingtype,newprice) VALUES (?,?);");
+		pstmt.setInt(1, Integer.parseInt(type));
+		pstmt.setFloat(2, Float.parseFloat(price));
+
+		pstmt.executeUpdate();
+		return true;
+		}
+		catch(Exception ex){
+			return false;
+		}
+	}
 
 
 	//	7:42 PM - Eric Freeman: call checkavailability(TIMESTAMP('2018-06-16', '01:00:00'),TIMESTAMP('2018-06-16','03:00:00'),"KoKoLand");
