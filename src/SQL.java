@@ -422,6 +422,7 @@ public class SQL {
 		}
 		
 	}
+
 	public synchronized  String parksubscribervehicle(String orderid,String mall) throws SQLException {
 		// TODO Auto-generated method stub
 		//		String result ="";
@@ -471,6 +472,21 @@ public class SQL {
 			return "declined";
 		}
 		
+	public synchronized  boolean insertPriceChangeRequest(String type,String price){
+		// TODO Auto-generated method stub
+		//		String result ="";
+		//		ResultSet rs =stmt.executeQuery("SELECT * FROM flights");
+		try{
+		PreparedStatement pstmt = con.prepareStatement("INSERT INTO PriceChange (parkingtype,newprice) VALUES (?,?);");
+		pstmt.setInt(1, Integer.parseInt(type));
+		pstmt.setFloat(2, Float.parseFloat(price));
+
+		pstmt.executeUpdate();
+		return true;
+		}
+		catch(Exception ex){
+			return false;
+		}
 	}
 
 
