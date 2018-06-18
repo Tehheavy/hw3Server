@@ -160,9 +160,7 @@ public class RequestHander extends Thread {
 						}
 						else if(splited[1].equals("parkmyvehicle"))
 						{
-//							String[][] sets=mysql.getAvailableParking(splited[2]);
 							if(splited.length==4){
-//								out.writeObject("the mall is:"+splited[3]);
 								out.writeObject(mysql.parksubscribervehicle(splited[2],splited[3]));
 							}
 							else out.writeObject(mysql.parkvehicle(splited[2]));
