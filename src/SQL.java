@@ -422,7 +422,56 @@ public class SQL {
 		}
 		
 	}
-	
+
+	public synchronized  String parksubscribervehicle(String orderid,String mall) throws SQLException {
+		// TODO Auto-generated method stub
+		//		String result ="";
+		PreparedStatement pstmt,pstmt2,pstmt3,pstmt4;
+		pstmt = con.prepareStatement("SELECT * FROM ParkingOrders where ID = ? and Parked = 0");
+		pstmt.setString(1, orderid);
+		ResultSet rs = pstmt.executeQuery();
+		ResultSetMetaData rsmd = rs.getMetaData();
+		String mallname,personid,carid,username;
+		if(rs.next()){
+			System.out.println("personid:"+rs.getString(2)+ " cardid:"+rs.getString(3) + " username:"+ rs.getString(7));
+			personid=rs.getString(2);
+			carid=rs.getString(3);
+			username=rs.getString(7);
+			System.out.println("b4 pstmt2");
+
+			pstmt2 = con.prepareStatement("SELECT * FROM ParkingSpots2 WHERE `mallname` = ? and username IS NULL");
+			System.out.println("b4 pstmt22");
+			pstmt2.setString(1,mall);
+			ResultSet rs2 = pstmt2.executeQuery();
+			if(rs2.next()){
+				String id = rs2.getString(1);
+				System.out.println("b4 pstmt3 ID IS:"+id);
+				pstmt3=con.prepareStatement("UPDATE `ParkingSpots2` SET `Carid` = ?, `username` = ? WHERE `ID` = ?;");
+				
+				System.out.println("b4 pstmt4");
+				pstmt3.setInt(1, Integer.parseInt(carid));
+				pstmt3.setString(2, username);
+				pstmt3.setInt(3, Integer.parseInt(id));
+				System.out.println("b4 pstmt5");
+				pstmt3.executeUpdate();
+				System.out.println("b4 pstmt6");
+				
+				pstmt4=con.prepareStatement("UPDATE `ParkingOrders` SET `Parked` = 1 WHERE `ID` = ?;");
+				pstmt4.setString(1, orderid);
+				pstmt4.executeUpdate();
+				return "accepted";
+				
+			}
+			else{
+				System.out.println("no kwery");
+				return "declined";
+			}
+		}
+		else {
+			System.out.println("uhoh");
+			return "declined";
+		}
+		
 	public synchronized  boolean insertPriceChangeRequest(String type,String price){
 		// TODO Auto-generated method stub
 		//		String result ="";
