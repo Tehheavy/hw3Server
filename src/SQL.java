@@ -471,6 +471,7 @@ public class SQL {
 			System.out.println("uhoh");
 			return "declined";
 		}
+	}
 		
 	public synchronized  boolean insertPriceChangeRequest(String type,String price){
 		// TODO Auto-generated method stub
