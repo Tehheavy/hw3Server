@@ -179,10 +179,15 @@ public class RequestHander extends Thread {
 //							String[][] sets=mysql.getAvailableParking(splited[2]);
 							out.writeObject("no implemento");
 						}
+						else if(splited[1].equals("cancelableorder"))
+						{
+							String[][] sets=mysql.getAvailableCancels(splited[2]);
+							out.writeObject(sets);
+						}
 						else if(splited[1].equals("cancelorder"))
 						{
-//							String[][] sets=mysql.getAvailableParking(splited[2]);
-							out.writeObject("no implemento");
+							String sets=mysql.CancelParking(splited[2]);
+							out.writeObject(sets);
 						}
 						else if(splited[1].equals("pricechange"))
 						{

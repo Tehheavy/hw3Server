@@ -564,7 +564,7 @@ public class SQL {
 			ResultSet rs3 = pstmt3.executeQuery();
 			if(rs3.next())
 				price = rs3.getFloat(8);
-			System.out.println("TEST"+price);
+			System.out.println("Price of leaving parking is: "+price);
 			pstmt2 = con.prepareStatement("DELETE FROM ParkingOrders "+ 
 					"WHERE ID=?");
 			pstmt2.setString(1, orderid);
@@ -575,6 +575,58 @@ public class SQL {
 
 	}
 
+	public synchronized String[][] getAvailableCancels(String username) {
+		// TODO Auto-generated method stub
+		//		stmt = con.createStatement();
+		try{
+			PreparedStatement pstmt;
+			pstmt = con.prepareStatement("SELECT * FROM ParkingOrders WHERE ArriveTime>CURRENT_TIMESTAMP() AND Type=2 AND Username=?");
+			pstmt.setString(1, username);
+			ResultSet rs = pstmt.executeQuery();
+			ArrayList<String[]> data=new ArrayList<String[]>();
+			ResultSetMetaData rsmd = rs.getMetaData();
+			int columnamount=rsmd.getColumnCount();
+			while(rs.next())
+			{
+				System.out.println(rs.getInt(1)+" "+rs.getInt(2)+" "+rs.getInt(3)+" "+rs.getInt(4)+" "+rs.getString(5)+" "+rs.getString(6)+" "+
+						rs.getString(7)+" "+rs.getInt(8)+" "+rs.getTimestamp(9).toString()+" "+rs.getTimestamp(10).toString());
+				String[] temp= new String[columnamount];
+				for(int i=0;i<columnamount;i++)
+					temp[i]=rs.getString(i+1);
+				data.add(temp);
+			}
+			String[][] values =new String[data.size()][columnamount];
+			for(int i=0;i<data.size();i++)
+			{
+				for(int j=0;j<columnamount;j++){
+					values[i][j]=data.get(i)[j];
+				}
+			}
+			return values;
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		return null;
+		//		System.out.println("results is:"+result);
+
+	}
+	public synchronized String CancelParking(String id) throws SQLException {
+		PreparedStatement pstmt,pstmt2,pstmt3;
+		pstmt3 = con.prepareStatement("SELECT * FROM ParkingOrders WHERE ID =?");
+		pstmt3.setInt(1, Integer.parseInt(id));
+		ResultSet rs3 = pstmt3.executeQuery();
+		Float price=(float) 0;
+		if(rs3.next())
+			price = rs3.getFloat(8);
+		pstmt2 = con.prepareStatement("DELETE FROM ParkingOrders "+ 
+				"WHERE ID=?");
+		pstmt2.setInt(1, Integer.parseInt(id));
+		pstmt2.executeUpdate();
+		
+		return String.valueOf(price);
+
+	}
 
 	//	7:42 PM - Eric Freeman: call checkavailability(TIMESTAMP('2018-06-16', '01:00:00'),TIMESTAMP('2018-06-16','03:00:00'),"KoKoLand");
 	//	7:43 PM - Eric Freeman: select * from ParkingOrders 
