@@ -6,10 +6,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 //import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import com.mysql.fabric.xmlrpc.base.Data;
 
@@ -488,6 +491,80 @@ public class SQL {
 		catch(Exception ex){
 			return false;
 		}
+	}
+	public synchronized boolean isparked(String carid) throws SQLException {
+		PreparedStatement pstmt = con.prepareStatement("SELECT * FROM ParkingSpots2 WHERE Carid = ?");
+		pstmt.setString(1, carid);
+		ResultSet  rs = pstmt.executeQuery();
+		if(rs.next())
+			return true;
+		else return false;
+	}
+	public synchronized String[][] getparkedcars(String username) throws SQLException {
+		PreparedStatement pstmt = con.prepareStatement("SELECT * FROM ParkingOrders WHERE Parked=1 AND Username=?");
+		pstmt.setString(1, username);
+		ResultSet rs = pstmt.executeQuery();
+		ArrayList<String[]> data=new ArrayList<String[]>();
+		ResultSetMetaData rsmd = rs.getMetaData();
+		int columnamount=rsmd.getColumnCount();
+		while(rs.next())
+		{
+			System.out.println(rs.getInt(1)+" "+rs.getInt(2)+" "+rs.getInt(3)+" "+rs.getInt(4)+" "+rs.getString(5)+" "+rs.getString(6)+" "+
+					rs.getString(7)+" "+rs.getInt(8)+" "+rs.getTimestamp(9).toString()+" "+rs.getTimestamp(10).toString());
+			String[] temp= new String[columnamount];
+			for(int i=0;i<columnamount;i++)
+				temp[i]=rs.getString(i+1);
+			data.add(temp);
+		}
+		String[][] values =new String[data.size()][columnamount];
+		for(int i=0;i<data.size();i++)
+		{
+			for(int j=0;j<columnamount;j++){
+				values[i][j]=data.get(i)[j];
+			}
+		}
+		return values;
+	}
+	
+	public synchronized String unparkvehicle(String carid,String username) throws SQLException {
+		PreparedStatement pstmt,pstmt2;
+		pstmt = con.prepareStatement("UPDATE ParkingSpots2"
+				+ " SET username=NULL , Carid=NULL"
+				+ " WHERE Carid = ? AND username = ?" );
+		pstmt.setString(1, carid);
+		pstmt.setString(2, username);
+		System.out.println(pstmt.toString());
+		pstmt.executeUpdate();
+		
+		pstmt = con.prepareStatement("SELECT * FROM ParkingOrders WHERE CarID='"+carid+"' AND Username='"+username+"'");
+		System.out.println(pstmt.toString());
+		ResultSet rs= pstmt.executeQuery();
+		int type=3;
+		String orderid=null;
+		while(rs.next()) {
+			type=Integer.parseInt(rs.getString("Type"));
+			orderid=rs.getString("ID");
+			System.out.println("we got:~~~~~~~~~~~~~~~~~"+String.valueOf(type));
+		}
+		//if he is a subscriber do:
+		if(type>2) {
+			
+			pstmt2 = con.prepareStatement("UPDATE ParkingOrders"
+					+ " SET Parked = '0'"
+					+ " WHERE CarID = ? AND Username = ? AND Parked = '1'");
+			pstmt2.setString(1, carid);
+			pstmt2.setString(2, username);
+			pstmt2.executeUpdate();
+		}
+		else if(orderid!=null) {
+			pstmt2 = con.prepareStatement("DELETE FROM ParkingOrders "+ 
+					"WHERE ID=?");
+			pstmt2.setString(1, orderid);
+			pstmt2.executeUpdate();
+		}
+		
+		return "Accepted";
+
 	}
 
 
