@@ -627,6 +627,23 @@ public class SQL {
 		return String.valueOf(price);
 
 	}
+	
+	public synchronized String getAvailableRequests() throws SQLException {
+		PreparedStatement pstmt,pstmt2,pstmt3;
+		pstmt3 = con.prepareStatement("SELECT * FROM PriceChange");
+		ResultSet rs3 = pstmt3.executeQuery();
+		String s=null;
+		while(rs3.next())
+		{
+			if(s==null)
+				s=rs3.getString(1)+" "+rs3.getString(2)+" "+rs3.getString(3);
+			else
+			s=s+" "+rs3.getString(1)+" "+rs3.getString(2)+" "+rs3.getString(3);
+		}
+		
+		return s;
+
+	}
 
 	//	7:42 PM - Eric Freeman: call checkavailability(TIMESTAMP('2018-06-16', '01:00:00'),TIMESTAMP('2018-06-16','03:00:00'),"KoKoLand");
 	//	7:43 PM - Eric Freeman: select * from ParkingOrders 
