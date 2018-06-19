@@ -527,7 +527,7 @@ public class SQL {
 	}
 	
 	public synchronized String unparkvehicle(String carid,String username) throws SQLException {
-		PreparedStatement pstmt,pstmt2;
+		PreparedStatement pstmt,pstmt2,pstmt3;
 		pstmt = con.prepareStatement("UPDATE ParkingSpots2"
 				+ " SET username=NULL , Carid=NULL"
 				+ " WHERE Carid = ? AND username = ?" );
@@ -541,6 +541,7 @@ public class SQL {
 		ResultSet rs= pstmt.executeQuery();
 		int type=3;
 		String orderid=null;
+		float price = 0;
 		while(rs.next()) {
 			type=Integer.parseInt(rs.getString("Type"));
 			orderid=rs.getString("ID");
@@ -555,15 +556,22 @@ public class SQL {
 			pstmt2.setString(1, carid);
 			pstmt2.setString(2, username);
 			pstmt2.executeUpdate();
+				
 		}
 		else if(orderid!=null) {
+			pstmt3 = con.prepareStatement("SELECT * FROM ParkingOrders WHERE ID =?");
+			pstmt3.setInt(1, Integer.parseInt(orderid));
+			ResultSet rs3 = pstmt3.executeQuery();
+			if(rs3.next())
+				price = rs3.getFloat(8);
+			System.out.println("TEST"+price);
 			pstmt2 = con.prepareStatement("DELETE FROM ParkingOrders "+ 
 					"WHERE ID=?");
 			pstmt2.setString(1, orderid);
 			pstmt2.executeUpdate();
 		}
 		
-		return "Accepted";
+		return String.valueOf(price);
 
 	}
 
