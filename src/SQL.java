@@ -656,6 +656,15 @@ public class SQL {
 		pstmt.setString(1, orderid);
 		pstmt.executeUpdate();
 	}
+	public void setprice(String orderid , float price) throws SQLException {
+		PreparedStatement pstmt;
+		pstmt = con.prepareStatement("UPDATE ParkingOrders"
+				+ " SET Price=?"
+				+ " WHERE ID = ?" );
+		pstmt.setFloat(1, price);
+		pstmt.setString(2, orderid);
+		pstmt.executeUpdate();
+	}
 	public void deleteorder(String orderid) throws SQLException {
 		PreparedStatement pstmt = con.prepareStatement("DELETE FROM ParkingOrders "+ 
 				"WHERE ID=?");

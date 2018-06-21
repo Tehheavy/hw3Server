@@ -44,7 +44,12 @@ public class RoutineJobs  extends Thread  {
 							rs.getString("parked").equals("0")&&
 							Integer.parseInt(rs.getString("Type"))==2){
 						System.out.println(rs.getString("username")+"is late!!!, sending email");
-						sql.setnotified(rs.getString("ID"));
+						Float price=rs.getFloat("Price"); //alex added
+						price=(float) (price*1.2);
+						System.out.println("new price after 20% is "+price);
+						String id=rs.getString("ID"); // alex added
+						sql.setnotified(id); // changed to id variable from rs.getstring id
+						sql.setprice(id, price);
 						EN.sendmail(rs.getString("Email"), "You are late for your spot, 20% price increase.");
 					}
 					date = date.plusMinutes(25);
