@@ -44,6 +44,7 @@ public class RoutineJobs  extends Thread  {
 							Integer.parseInt(rs.getString("Type"))==2){
 						System.out.println(rs.getString("username")+"is late!!!, sending email");
 						sql.setnotified(rs.getString("ID"));
+						EN.sendmail(rs.getString("Email"), "You are late for your spot, 20% price increase.");
 					}
 					date = date.plusMinutes(25);
 					if(LocalDateTime.now().isAfter(date)&&
