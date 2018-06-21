@@ -644,6 +644,25 @@ public class SQL {
 		return s;
 
 	}
+	public synchronized ResultSet getorders() throws SQLException{
+		PreparedStatement pstmt = con.prepareStatement("SELECT * FROM ParkingOrders");
+		return pstmt.executeQuery();
+	}
+	public void setnotified(String orderid) throws SQLException {
+		PreparedStatement pstmt;
+		pstmt = con.prepareStatement("UPDATE ParkingOrders"
+				+ " SET werenotified='1'"
+				+ " WHERE ID = ?" );
+		pstmt.setString(1, orderid);
+		pstmt.executeUpdate();
+	}
+	public void deleteorder(String orderid) throws SQLException {
+		PreparedStatement pstmt = con.prepareStatement("DELETE FROM ParkingOrders "+ 
+				"WHERE ID=?");
+		pstmt.setString(1, orderid);
+		pstmt.executeUpdate();
+		
+	}
 
 	//	7:42 PM - Eric Freeman: call checkavailability(TIMESTAMP('2018-06-16', '01:00:00'),TIMESTAMP('2018-06-16','03:00:00'),"KoKoLand");
 	//	7:43 PM - Eric Freeman: select * from ParkingOrders 

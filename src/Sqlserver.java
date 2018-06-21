@@ -11,7 +11,13 @@ public class Sqlserver {
 	public static void main(String[] args) throws IOException {
 		int portNumber = Integer.parseInt("4138");
 		ServerSocket serverSocket =null;
+		String database,username,password;
+		database="JDBC:MYSQL://cs.telhai.ac.il/Group_2";
+		username="cs313313991";
+		password="NONE";
 		try {
+			Thread notifications = new Thread(new RoutineJobs(database,username,password));
+			notifications.start();
 			serverSocket =
 					new ServerSocket(portNumber);
 			while(true) {
@@ -19,10 +25,6 @@ public class Sqlserver {
 				Socket clientSocket = serverSocket.accept(); 
 				System.out.println("Connected with:"+clientSocket.toString());
 				//			SQL mysql = new SQL("JDBC:MYSQL://cs.telhai.ac.il/studentDB_cs313313991","cs313313991","NONE");
-				String database,username,password;
-				database="JDBC:MYSQL://cs.telhai.ac.il/Group_2";
-				username="cs313313991";
-				password="NONE";
 				Thread handler = new Thread( new RequestHander(clientSocket,database,username,password));
 				handler.start();
 			}
