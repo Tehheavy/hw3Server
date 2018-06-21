@@ -24,7 +24,8 @@ public class RoutineJobs  extends Thread  {
 
 	}
 	public void run () {
-	
+//		System.out.println("sending msg");
+//	EN.sendmail("gogosergey@gmail.com","server started");
 		while(true)
 		{
 			try {
