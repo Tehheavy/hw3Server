@@ -189,9 +189,24 @@ public class RequestHander extends Thread {
 							String sets=mysql.CancelParking(splited[2]);
 							out.writeObject(sets);
 						}
+						else if(splited[1].equals("changeprice")) // send accept/decline of price
+						{
+							String sets=mysql.changePrice(splited[2],splited[3],splited[4]);
+							out.writeObject(sets);
+						}
+						else if(splited[1].equals("pricedelete")) // send accept/decline of price
+						{
+							String sets=mysql.deleteprice(splited[2]);
+							out.writeObject(sets);
+						}
 						else if(splited[1].equals("pricerequests"))
 						{
 							String sets=mysql.getAvailableRequests();
+							out.writeObject(sets);
+						}
+						else if(splited[1].equals("myorders"))
+						{
+							String[][] sets=mysql.getUserOrders(splited[2]);
 							out.writeObject(sets);
 						}
 						else if(splited[1].equals("pricechange"))
