@@ -56,7 +56,7 @@ public class RoutineJobs  extends Thread  {
 					if(LocalDateTime.now().isAfter(date)&&
 							rs.getString("Parked").equals("0")&&
 							Integer.parseInt(rs.getString("Type"))==2){
-						System.out.println("deleting order:"+rs.getString("ID"));
+						System.out.println("deleting order: "+rs.getString("ID"));
 						sql.deleteorder(rs.getString("ID"));
 					}
 				}
