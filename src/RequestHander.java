@@ -231,6 +231,18 @@ public class RequestHander extends Thread {
 							}
 							break;
 						}
+						else if(splited[1].equals("parkingspots"))
+						{
+							if(splited.length!=3)
+								out.writeObject(null);
+							else{
+//								out.writeObject(mysql.getparkingspots(splited[2]));
+								String[][] rs = mysql.getparkingspots(splited[2]);
+								if(rs==null)
+									System.out.println("rs null");
+								else out.writeObject(rs);
+							}
+						}
 						
 						break;
 					case REMOVE:

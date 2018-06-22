@@ -811,6 +811,38 @@ public class SQL {
 		return null;
 		//		System.out.println("results is:"+result);
 	}
+	public String[][] getparkingspots(String mallname) {
+		try{
+			PreparedStatement pstmt;
+			pstmt = con.prepareStatement("SELECT * FROM ParkingSpots2 Where mallname=?");
+			pstmt.setString(1, mallname);
+			ResultSet rs = pstmt.executeQuery();
+			ArrayList<String[]> data=new ArrayList<String[]>();
+			ResultSetMetaData rsmd = rs.getMetaData();
+			int columnamount=3;
+			while(rs.next())
+			{
+				String[] temp= new String[5];
+				temp[0]=rs.getString("username");
+				temp[1]=rs.getString("Carid");
+				temp[2]=rs.getString("spot");
+				data.add(temp);
+			}
+			String[][] values =new String[data.size()][columnamount];
+			for(int i=0;i<data.size();i++)
+			{
+				for(int j=0;j<columnamount;j++){
+					values[i][j]=data.get(i)[j];
+				}
+			}
+			return values;
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		return null;
+		//		System.out.println("results is:"+result);
+	}
 
 	//	7:42 PM - Eric Freeman: call checkavailability(TIMESTAMP('2018-06-16', '01:00:00'),TIMESTAMP('2018-06-16','03:00:00'),"KoKoLand");
 	//	7:43 PM - Eric Freeman: select * from ParkingOrders 
