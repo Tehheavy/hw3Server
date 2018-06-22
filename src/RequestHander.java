@@ -108,6 +108,18 @@ public class RequestHander extends Thread {
 						{
 							System.out.print(splited[i]+" ");
 						}
+						if(splited[1].equals("1"))
+						{
+							{
+								int newid=mysql.insertCasualOrder(splited[1], splited[2], Integer.parseInt(splited[3]), Integer.parseInt(splited[4]),splited[5]
+										, splited[6], splited[7], splited[8], splited[9], splited[10],splited[11]);
+								if(newid!=0)
+								out.writeObject("acceptedorder " + newid);
+								else {
+									out.writeObject("nospaceorder");
+								}
+							}
+						}
 						if(splited[1].equals("2"))
 						{
 							if(mysql.insertOrder(splited[1], splited[2], Integer.parseInt(splited[3]), Integer.parseInt(splited[4]),splited[5]

@@ -122,7 +122,7 @@ public class SQL {
 		LocalDateTime testLeave=LocalDateTime.parse(LeaveDate.toString()+"T"+LeaveTime.toString());//.toString().substring(11, 16)
 		Timestamp time1 = Timestamp.valueOf(testArrive);
 		Timestamp time2 = Timestamp.valueOf(testLeave);
-		if(type.equals("2")){
+		if(type.equals("2")||type.equals("1")){
 			String test1="call checkavailability(TIMESTAMP('"+time1.toString().substring(0,10)+"', '"+time1.toString().substring(11, 19)+"'),TIMESTAMP('"+time2.toString().substring(0,9)+"', '"+time2.toString().substring(11, 18)+"'),\""+Mall+"\");";
 			System.out.println(test1);
 			CallableStatement cs = this.con.prepareCall("{call checkavailability(?,?,?)}");
@@ -153,7 +153,7 @@ public class SQL {
 		}
 		//    	//call checkavailability(TIMESTAMP('2018-06-16', '01:00:00'),TIMESTAMP('2018-06-16','03:00:00'),"KoKoLand");
 
-		PreparedStatement pstmt = con.prepareStatement("INSERT INTO ParkingOrders (PersonID,CarID,Type,RequestMall,ArriveTime,LeaveTime,Email,Username,Price,Parked) VALUES (?,?,?,?,?,?,?,?,?,?);");
+		PreparedStatement pstmt = con.prepareStatement("INSERT INTO ParkingOrders (PersonID,CarID,Type,RequestMall,ArriveTime,LeaveTime,Email,Username,Price,Parked) VALUES (?,?,?,?,?,?,?,?,?,?);",Statement.RETURN_GENERATED_KEYS);
 		pstmt.setInt(1, ID);
 		pstmt.setInt(2, CarID);
 		pstmt.setInt(3, Integer.parseInt(type));
@@ -167,6 +167,10 @@ public class SQL {
 		pstmt.setString(9, Price);
 		pstmt.setBoolean(10, false);
 		pstmt.executeUpdate();
+		ResultSet keys = pstmt.getGeneratedKeys();
+		keys.next();
+		int id = keys.getInt(1);
+		System.out.println("id of order is"+id);
 		try{
 			PreparedStatement pstmt2 = con.prepareStatement("INSERT INTO Cars (carid,parked,username) VALUES (?,?,?);");
 			pstmt2.setInt(1, CarID);
@@ -179,6 +183,80 @@ public class SQL {
 		}
 		return true;
 	}
+	public synchronized  int insertCasualOrder(String type,String username,int ID,int CarID,String Mall,String ArrivalDate,
+			String ArrivalTime,String LeaveDate,String LeaveTime,String Email,String Price) throws SQLException {
+		// TODO Auto-generated method stub
+		//		String result ="";
+		//		ResultSet available =stmt.executeQuery("SELECT * FROM flights");
+
+
+
+		LocalDateTime testArrive=LocalDateTime.parse(ArrivalDate.toString()+"T"+ArrivalTime.toString());
+		LocalDateTime testLeave=LocalDateTime.parse(LeaveDate.toString()+"T"+LeaveTime.toString());//.toString().substring(11, 16)
+		Timestamp time1 = Timestamp.valueOf(testArrive);
+		Timestamp time2 = Timestamp.valueOf(testLeave);
+		if(type.equals("2")||type.equals("1")){
+			String test1="call checkavailability(TIMESTAMP('"+time1.toString().substring(0,10)+"', '"+time1.toString().substring(11, 19)+"'),TIMESTAMP('"+time2.toString().substring(0,9)+"', '"+time2.toString().substring(11, 18)+"'),\""+Mall+"\");";
+			System.out.println(test1);
+			CallableStatement cs = this.con.prepareCall("{call checkavailability(?,?,?)}");
+			cs.setTimestamp(1, time1);
+			cs.setTimestamp(2, time2);
+			cs.setString(3, Mall);
+			ResultSet rs = cs.executeQuery();
+			int count=0;
+			while(rs.next()){
+				count++;
+			}
+
+			PreparedStatement pstmt3;
+			pstmt3 = con.prepareStatement("SELECT * FROM Malls Where mallname = ?");
+			pstmt3.setString(1, Mall);
+			ResultSet rs2 = pstmt3.executeQuery();
+			int space=0;
+			if(rs2.next())
+			{
+				space=rs2.getInt(2);
+			}
+			System.out.println("Mall space is:"+space+" and number of conflicts is:"+count);
+			if(count>=space)
+			{
+				System.out.println("ORDER CANNOT BE ACCOMPLISHED , NO SPACE IN: "+Mall);
+				return 0;
+			}
+		}
+		//    	//call checkavailability(TIMESTAMP('2018-06-16', '01:00:00'),TIMESTAMP('2018-06-16','03:00:00'),"KoKoLand");
+
+		PreparedStatement pstmt = con.prepareStatement("INSERT INTO ParkingOrders (PersonID,CarID,Type,RequestMall,ArriveTime,LeaveTime,Email,Username,Price,Parked) VALUES (?,?,?,?,?,?,?,?,?,?);",Statement.RETURN_GENERATED_KEYS);
+		pstmt.setInt(1, ID);
+		pstmt.setInt(2, CarID);
+		pstmt.setInt(3, Integer.parseInt(type));
+		pstmt.setString(4, Mall);
+		//		pstmt.setTimestamp(5, Timestamp.valueOf(ArrivalDate + " " + ArrivalTime));
+		//		pstmt.setString(5, ArrivalDate);
+		pstmt.setTimestamp(5, time1);
+		pstmt.setTimestamp(6, time2);
+		pstmt.setString(7, Email);
+		pstmt.setString(8, username);
+		pstmt.setString(9, Price);
+		pstmt.setBoolean(10, false);
+		pstmt.executeUpdate();
+		ResultSet keys = pstmt.getGeneratedKeys();
+		keys.next();
+		int id = keys.getInt(1);
+		System.out.println("id of order is"+id);
+		try{
+			PreparedStatement pstmt2 = con.prepareStatement("INSERT INTO Cars (carid,parked,username) VALUES (?,?,?);");
+			pstmt2.setInt(1, CarID);
+			pstmt2.setBoolean(2, false);
+			pstmt2.setString(3, username);
+			pstmt2.executeUpdate();
+		}
+		catch(Exception e){
+			System.out.println("Car already in database");
+		}
+		return id;
+	}
+	
 	public synchronized String GetMalls() throws SQLException {
 		// TODO Auto-generated method stub
 		PreparedStatement pstmt;
