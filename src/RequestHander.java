@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.SplittableRandom;
 
 
@@ -17,10 +18,13 @@ public class RequestHander extends Thread {
 	Mode curstate = Mode.NONE;
 	int portNumber=4138;
 	SQL mysql;
-	public RequestHander(Socket client,String database,String username,String password) throws SQLException {
+	List<String> l;
+	String loggeduser=null;
+	public RequestHander(Socket client,String database,String username,String password,List<String> l ) throws SQLException {
 		super();
 		clientsocket=client;
 		mysql = new SQL(database,username,password);
+		this.l=l;
 
 	}
 	public enum Mode {
@@ -67,10 +71,24 @@ public class RequestHander extends Thread {
 					switch(requestmode){
 					case LOGIN:
 						try{
-							
+							System.out.println(l);
 							if(splited.length==3)
 							{
-								out.writeObject(mysql.containsUserLogin(splited[1], splited[2]));
+								String res=mysql.containsUserLogin(splited[1], splited[2]);
+								if(!res.equals("0")){
+									synchronized (l) {
+//										l.add(splited[1]);
+										if(l.contains(splited[1])){
+											out.writeObject("-1");
+											break;
+										}
+										else{
+											l.add(splited[1]);
+											loggeduser=splited[1];
+										}
+									}
+								}
+								out.writeObject(res);
 								out.flush();
 								break;
 							}
@@ -290,7 +308,14 @@ public class RequestHander extends Thread {
 			System.out.println(e.getMessage());
 		}
 		finally {
-			try { clientsocket.close(); }
+			try {
+				System.out.println("in finally, logged user was:"+loggeduser);
+				clientsocket.close(); 
+				if(loggeduser!=null)
+					synchronized (l) {						
+						l.remove(loggeduser);
+					}
+				}
 			catch (Exception e ){ ; }
 		}
 	} 

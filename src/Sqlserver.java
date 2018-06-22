@@ -2,6 +2,9 @@
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.net.*;
 
 public class Sqlserver {
@@ -15,6 +18,7 @@ public class Sqlserver {
 		database="JDBC:MYSQL://cs.telhai.ac.il/Group_2";
 		username="cs313313991";
 		password="NONE";
+		List<String> l = Collections.synchronizedList(new ArrayList<String>());
 		try {
 			Thread notifications = new Thread(new RoutineJobs(database,username,password));
 			notifications.start();
@@ -25,7 +29,7 @@ public class Sqlserver {
 				Socket clientSocket = serverSocket.accept(); 
 				System.out.println("Connected with:"+clientSocket.toString());
 				//			SQL mysql = new SQL("JDBC:MYSQL://cs.telhai.ac.il/studentDB_cs313313991","cs313313991","NONE");
-				Thread handler = new Thread( new RequestHander(clientSocket,database,username,password));
+				Thread handler = new Thread( new RequestHander(clientSocket,database,username,password,l));
 				handler.start();
 			}
 
