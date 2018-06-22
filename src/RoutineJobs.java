@@ -29,7 +29,7 @@ public class RoutineJobs  extends Thread  {
 		while(true)
 		{
 			try {
-				sleep(minute/60);
+				sleep(minute/30);
 //				EN.sendmail("gogosergey@gmail.com", "ONCE PER MINUTE TEST");
 				ResultSet rs = sql.getorders();
 				while(rs.next()){
