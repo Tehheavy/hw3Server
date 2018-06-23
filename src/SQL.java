@@ -1007,13 +1007,14 @@ public class SQL {
 			ResultSet rs = pstmt.executeQuery();
 			ArrayList<String[]> data=new ArrayList<String[]>();
 			ResultSetMetaData rsmd = rs.getMetaData();
-			int columnamount=3;
+			int columnamount=4;
 			while(rs.next())
 			{
 				String[] temp= new String[5];
 				temp[0]=rs.getString("username");
 				temp[1]=rs.getString("Carid");
 				temp[2]=rs.getString("spot");
+				temp[3]=rs.getString("istaken");
 				data.add(temp);
 			}
 			String[][] values =new String[data.size()][columnamount];
@@ -1030,6 +1031,28 @@ public class SQL {
 		}
 		return null;
 		//		System.out.println("results is:"+result);
+	}
+	public String setbroken(String spot, String mallname) throws SQLException {
+		PreparedStatement pstmt;
+		pstmt = con.prepareStatement("UPDATE ParkingSpots2"
+				+ " SET istaken='1'"
+				+ " WHERE Spot = ?"
+				+ " AND mallname=?" );
+		pstmt.setString(1, spot);
+		pstmt.setString(2, mallname);
+		pstmt.executeUpdate();
+		return "accepted";
+	}
+	public String setnotbroken(String spot, String mallname) throws SQLException {
+		PreparedStatement pstmt;
+		pstmt = con.prepareStatement("UPDATE ParkingSpots2"
+				+ " SET istaken='0'"
+				+ " WHERE Spot = ?"
+				+ " AND mallname=?" );
+		pstmt.setString(1, spot);
+		pstmt.setString(2, mallname);
+		pstmt.executeUpdate();
+		return "accepted";
 	}
 
 	//	7:42 PM - Eric Freeman: call checkavailability(TIMESTAMP('2018-06-16', '01:00:00'),TIMESTAMP('2018-06-16','03:00:00'),"KoKoLand");

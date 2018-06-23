@@ -266,6 +266,16 @@ public class RequestHander extends Thread {
 								else out.writeObject(rs);
 							}
 						}
+						else if(splited[1].equals("setbroken"))
+						{
+							String sets=mysql.setbroken(splited[2],splited[3]);
+							out.writeObject(sets);
+						}
+						else if(splited[1].equals("setnotbroken"))
+						{
+							String sets=mysql.setnotbroken(splited[2],splited[3]);
+							out.writeObject(sets);
+						}
 						
 						break;
 					case REMOVE:
