@@ -568,7 +568,7 @@ public class SQL {
 			System.out.println("b4 pstmt2");
 			System.out.println("b4 pstmt2clos mallnaem is:"+mallname);
 
-			pstmt2 = con.prepareStatement("SELECT * FROM ParkingSpots2 WHERE `mallname` = ? and username IS NULL");
+			pstmt2 = con.prepareStatement("SELECT * FROM ParkingSpots2 WHERE `mallname` = ? and username IS NULL AND istaken = '0'");
 			System.out.println("b4 pstmt22");
 			pstmt2.setString(1,mallname);
 			ResultSet rs2 = pstmt2.executeQuery();
@@ -626,7 +626,7 @@ public class SQL {
 			username=rs.getString(7);
 			System.out.println("b4 pstmt2");
 
-			pstmt2 = con.prepareStatement("SELECT * FROM ParkingSpots2 WHERE `mallname` = ? and username IS NULL");
+			pstmt2 = con.prepareStatement("SELECT * FROM ParkingSpots2 WHERE `mallname` = ? and username IS NULL AND istaken = '0'");
 			System.out.println("b4 pstmt22");
 			pstmt2.setString(1,mall);
 			ResultSet rs2 = pstmt2.executeQuery();
