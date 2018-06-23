@@ -35,10 +35,10 @@ public class RoutineJobs  extends Thread  {
 				while(rs.next()){
 					Timestamp arrive = rs.getTimestamp("ArriveTime");
 					String wasnotified = rs.getString("werenotified");
-//					System.out.println("arrive time is:"+arrive);
+					Timestamp leavetime = rs.getTimestamp("LeaveTime");
+					String ordertype = rs.getString("Type");
 					LocalDateTime date = arrive.toLocalDateTime();
 					date = date.plusMinutes(5);
-//					System.out.println("after 5 min is:"+ date + "cur time is:"+LocalDateTime.now()+" "+ LocalDateTime.now().isAfter(date));
 					if(LocalDateTime.now().isAfter(date)&&
 							rs.getString("werenotified").equals("0")&&
 							rs.getString("parked").equals("0")&&
@@ -58,6 +58,14 @@ public class RoutineJobs  extends Thread  {
 							Integer.parseInt(rs.getString("Type"))==2){
 						System.out.println("deleting order: "+rs.getString("ID"));
 						sql.deleteorder(rs.getString("ID"));
+					}
+					
+					if(Integer.parseInt(ordertype)>2){
+						LocalDateTime subscriberdate = leavetime.toLocalDateTime();
+						subscriberdate.minusDays(7);
+						if(LocalDateTime.now().isAfter(subscriberdate)){
+							EN.sendmail(rs.getString("Email"),"Your parkinglib subscription ends in 7 days, remember to re-subscribe.");
+						}
 					}
 				}
 				
