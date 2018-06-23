@@ -69,9 +69,16 @@ public class RoutineJobs  extends Thread  {
 					
 					if(Integer.parseInt(ordertype)>2){
 						LocalDateTime subscriberdate = leavetime.toLocalDateTime();
-						subscriberdate.minusDays(7);
 						if(LocalDateTime.now().isAfter(subscriberdate)){
-							EN.sendmail(rs.getString("Email"),"Your parkinglib subscription ends in 7 days, remember to re-subscribe.");
+							sql.deleteorder(rs.getString("ID"));
+							System.out.println("ENDING "+rs.getString("Username")+"'s Subscription");
+						}
+						else{				
+							subscriberdate=subscriberdate.minusDays(7);
+							if(LocalDateTime.now().isAfter(subscriberdate)&&rs.getString("werenotified").equals("0")){
+								EN.sendmail(rs.getString("Email"),"Your parkinglib subscription ends in 7 days, remember to re-subscribe.");
+								sql.setnotified(rs.getString("ID")); // changed to id variable from rs.getstring id
+							}
 						}
 					}
 				}

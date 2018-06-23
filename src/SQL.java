@@ -955,7 +955,7 @@ public class SQL {
 	/**
 	 * requests the database to return all of the orders of a certain user
 	 * @param str1 username of user
-	 * @return string[][] ,String[i]=id,leavetime,arrivetime,mall,price
+	 * @return string[][] ,String[i]=id,Arrivetime,LeaveTime,mall,price
 	 */
 	public synchronized String[][] getUserOrders(String str1) {
 		// TODO Auto-generated method stub
