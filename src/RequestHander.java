@@ -27,6 +27,11 @@ public class RequestHander extends Thread {
 		this.l=l;
 
 	}
+	/**
+	 * Enum containing:NONE,LOGIN,REGISTER,ORDER,REQUEST,UPDATE,REMOVE,COMPLAINT
+	 * @author gogop
+	 *
+	 */
 	public enum Mode {
 		NONE,LOGIN,REGISTER,ORDER,REQUEST,UPDATE,REMOVE,COMPLAINT
 	}

@@ -18,6 +18,13 @@ public class RoutineJobs  extends Thread  {
 	public RoutineJobs() {
 		EN = new EmailNotifications();
 	}
+	/**
+	 * Constructor for Routinejobs class,connects to sql server to send emails
+	 * @param database the URL of the sql server
+	 * @param username
+	 * @param password
+	 * @throws SQLException
+	 */
 	public RoutineJobs(String database, String username, String password) throws SQLException {
 		sql= new SQL(database, username, password);
 		EN = new EmailNotifications();

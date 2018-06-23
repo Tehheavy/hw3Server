@@ -7,6 +7,11 @@ public class EmailNotifications {
 	public EmailNotifications() {
 
 	}
+	/**
+	 * Sends String "msg" as email to "to" parameter 
+	 * @param to target email
+	 * @param msg message to send to target email
+	 */
 	public void sendmail(String to,String msg){
 		final String username = "parkinglibhw3@gmail.com";
 		final String password = "123321lib";

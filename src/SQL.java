@@ -31,6 +31,12 @@ public class SQL {
 
 
 	}
+	/**
+	 * Inserts User into user database when registering
+	 * @param from username
+	 * @param to password
+	 * @throws SQLException
+	 */
 	public synchronized  void insert(String from,String to) throws SQLException {
 		// TODO Auto-generated method stub
 		//		String result ="";
@@ -42,6 +48,12 @@ public class SQL {
 
 		pstmt.executeUpdate();
 	}
+	/**
+	 * returns a single string from database using parameter 1,output=username:bob\nusername:alex
+	 * @param num can be * or a certain user id
+	 * @return a single string from database using parameter 1,output=username:bob\nusername:alex
+	 * @throws SQLException
+	 */
 	public synchronized  String select(String num) throws SQLException {
 		// TODO Auto-generated method stub
 		//		stmt = con.createStatement();
@@ -71,6 +83,13 @@ public class SQL {
 		//		System.out.println("results is:"+result);
 		return result;
 	}
+	/**
+	 * this function is used to check if used exists when logging in
+	 * @param num the username of the user
+	 * @param pass the password of the user
+	 * @return returns users type(1-4 from customer-chain manager), 0 if doesnt
+	 * @throws SQLException
+	 */
 	public synchronized  String containsUserLogin(String num,String pass) throws SQLException {
 		// TODO Auto-generated method stub
 		//		stmt = con.createStatement();
@@ -91,6 +110,12 @@ public class SQL {
 		//		System.out.println("results is:"+result);
 
 	}
+	/**
+	 * checks if username is already taken , used for register
+	 * @param num username of user
+	 * @return returns true if username is taken,else false
+	 * @throws SQLException
+	 */
 	public synchronized  boolean containsUser(String num) throws SQLException {
 		// TODO Auto-generated method stub
 		//		stmt = con.createStatement();
@@ -110,6 +135,22 @@ public class SQL {
 		//		System.out.println("results is:"+result);
 
 	}
+	/**
+	 *  inserts a users order to the database using the given parameters
+	 * @param type
+	 * @param username
+	 * @param ID
+	 * @param CarID
+	 * @param Mall
+	 * @param ArrivalDate
+	 * @param ArrivalTime
+	 * @param LeaveDate
+	 * @param LeaveTime
+	 * @param Email
+	 * @param Price
+	 * @return returns true if succeeded , else false
+	 * @throws SQLException
+	 */
 	public synchronized  boolean insertOrder(String type,String username,int ID,int CarID,String Mall,String ArrivalDate,
 			String ArrivalTime,String LeaveDate,String LeaveTime,String Email,String Price) throws SQLException {
 		// TODO Auto-generated method stub
@@ -183,6 +224,23 @@ public class SQL {
 		}
 		return true;
 	}
+	
+	/**
+	 * used for casual parking(instant) , similar to insertOrder
+	 * @param type
+	 * @param username
+	 * @param ID
+	 * @param CarID
+	 * @param Mall
+	 * @param ArrivalDate
+	 * @param ArrivalTime
+	 * @param LeaveDate
+	 * @param LeaveTime
+	 * @param Email
+	 * @param Price
+	 * @return returns the id of the user that ordered the parking if successful, else returns "0"
+	 * @throws SQLException
+	 */
 	public synchronized  int insertCasualOrder(String type,String username,int ID,int CarID,String Mall,String ArrivalDate,
 			String ArrivalTime,String LeaveDate,String LeaveTime,String Email,String Price) throws SQLException {
 		// TODO Auto-generated method stub
@@ -256,7 +314,11 @@ public class SQL {
 		}
 		return id;
 	}
-	
+	/**
+	 * function returns all the malls in the database as a single string
+	 * @return "mallname1"+" "+mallname2"+...
+	 * @throws SQLException
+	 */
 	public synchronized String GetMalls() throws SQLException {
 		// TODO Auto-generated method stub
 		PreparedStatement pstmt;
@@ -282,6 +344,12 @@ public class SQL {
 		//		System.out.println("results is:"+result);
 
 	}
+	/**
+	 * function gets the price of a certain parking type from the database
+	 * @param type 1- casual parking , 2-One time order
+	 * @return returns the price as a Float String of a certain parking type
+	 * @throws SQLException
+	 */
 	public synchronized String GetPrice(int type) throws SQLException {
 		// TODO Auto-generated method stub
 		//		stmt = con.createStatement();
@@ -309,6 +377,11 @@ public class SQL {
 
 	}
 
+	/**
+	 * function scans the database for all complaints from a certain user, and returns them in the form of a String[][]
+	 * @param User the user which you want to get the complaints off
+	 * @return string[i]="id","username","complaint","date","response","isresolved"
+	 */
 	public synchronized String[][] GetComplaints(String User) {
 		// TODO Auto-generated method stub
 		//		stmt = con.createStatement();
@@ -349,6 +422,10 @@ public class SQL {
 		//		System.out.println("results is:"+result);
 
 	}
+	/**
+	 * functions gets all the complaints in the database 
+	 * @return string[i]="id","username","complaint","date","response","isresolved"
+	 */
 	public synchronized String[][] GetAllComplaints() {
 		// TODO Auto-generated method stub
 		//		stmt = con.createStatement();
@@ -384,6 +461,12 @@ public class SQL {
 
 	}
 
+	/**
+	 * adds a complaint to the database from certain user 
+	 * @param username username of the user
+	 * @param complaint the complaint of the user
+	 * @throws SQLException
+	 */
 	public synchronized  void addcomplaint(String username,String complaint) throws SQLException {
 		// TODO Auto-generated method stub
 		//		String result ="";
@@ -397,6 +480,12 @@ public class SQL {
 		pstmt.executeUpdate();
 		System.out.println("added complaint");
 	}
+	/**
+	 * adds a response the a given users complaint
+	 * @param complaintid id of the users complaint
+	 * @param complaint the response
+	 * @throws SQLException
+	 */
 	public void addresponse(String complaintid, String complaint) throws SQLException {
 		// TODO Auto-generated method stub
 		System.out.println(complaint);
@@ -414,7 +503,11 @@ public class SQL {
 
 
 
-
+	/**
+	 * gets all the currently available Parking Orders which have no expired
+	 * @param username username of the user
+	 * @return string[][] ,String[i]=id,personid,carid,type,mall,email,username,price,arrivetime,leavetime,
+	 */
 	public synchronized String[][] getAvailableParking(String username) {
 		// TODO Auto-generated method stub
 		//		stmt = con.createStatement();
@@ -451,6 +544,12 @@ public class SQL {
 		//		System.out.println("results is:"+result);
 
 	}
+	/**
+	 * function parks a certain vehicle using a the given order id of the vehicle
+	 * @param orderid id of the order
+	 * @return returns accepted if successfull else declined
+	 * @throws SQLException
+	 */
 	public synchronized  String parkvehicle(String orderid) throws SQLException {
 		// TODO Auto-generated method stub
 		//		String result ="";
@@ -504,6 +603,13 @@ public class SQL {
 		
 	}
 
+	/**
+	 * function used to park a vehicle under a subscription
+	 * @param orderid id of order
+	 * @param mall name of mall
+	 * @return "accepted" if successful , else "declined"
+	 * @throws SQLException
+	 */
 	public synchronized  String parksubscribervehicle(String orderid,String mall) throws SQLException {
 		// TODO Auto-generated method stub
 		//		String result ="";
@@ -553,7 +659,12 @@ public class SQL {
 			return "declined";
 		}
 	}
-		
+		/**
+		 * used to insert a request to change a certain parking types price
+		 * @param type 1-casual , 2 - one time order
+		 * @param price new desired price 
+		 * @return
+		 */
 	public synchronized  boolean insertPriceChangeRequest(String type,String price){
 		// TODO Auto-generated method stub
 		//		String result ="";
@@ -570,6 +681,12 @@ public class SQL {
 			return false;
 		}
 	}
+	/**
+	 * checks if a given car is already parked somewhere
+	 * @param carid id of car
+	 * @return true if parked , else false
+	 * @throws SQLException
+	 */
 	public synchronized boolean isparked(String carid) throws SQLException {
 		PreparedStatement pstmt = con.prepareStatement("SELECT * FROM ParkingSpots2 WHERE Carid = ?");
 		pstmt.setString(1, carid);
@@ -578,6 +695,12 @@ public class SQL {
 			return true;
 		else return false;
 	}
+	/**
+	 * returns all of a certain users parking orders in a form of a String[][]
+	 * @param username
+	 * @return string[][] ,String[i]=id,personid,carid,type,mall,email,username,price,arrivetime,leavetime,
+	 * @throws SQLException
+	 */
 	public synchronized String[][] getparkedcars(String username) throws SQLException {
 		PreparedStatement pstmt = con.prepareStatement("SELECT * FROM ParkingOrders WHERE Parked=1 AND Username=?");
 		pstmt.setString(1, username);
@@ -603,7 +726,13 @@ public class SQL {
 		}
 		return values;
 	}
-	
+	/**
+	 * request from database to unpark a certain vehicle of carid,user
+	 * @param carid id of car
+	 * @param username username of user
+	 * @return returns the price of the time spent in parking
+	 * @throws SQLException
+	 */
 	public synchronized String unparkvehicle(String carid,String username) throws SQLException {
 		PreparedStatement pstmt,pstmt2,pstmt3;
 		pstmt = con.prepareStatement("UPDATE ParkingSpots2"
@@ -653,6 +782,11 @@ public class SQL {
 
 	}
 
+	/**
+	 * returns all of the orders a given user can cancel
+	 * @param username username of user 
+	 * @return string[][] ,String[i]=id,personid,carid,type,mall,email,username,price,arrivetime,leavetime
+	 */
 	public synchronized String[][] getAvailableCancels(String username) {
 		// TODO Auto-generated method stub
 		//		stmt = con.createStatement();
@@ -689,6 +823,12 @@ public class SQL {
 		//		System.out.println("results is:"+result);
 
 	}
+	/**
+	 * function requests from database to cancel the parking of a given order id
+	 * @param id the id of the order you want to cancel
+	 * @return returns from of the order
+	 * @throws SQLException
+	 */
 	public synchronized String CancelParking(String id) throws SQLException {
 		PreparedStatement pstmt,pstmt2,pstmt3;
 		pstmt3 = con.prepareStatement("SELECT * FROM ParkingOrders WHERE ID =?");
@@ -705,7 +845,11 @@ public class SQL {
 		return String.valueOf(price);
 
 	}
-	
+	/**
+	 * requests from server to return all available price change requests in the form of a single string
+	 * @return id String= parkingtype newprice id parkingtype newprice .. . . . .
+	 * @throws SQLException
+	 */
 	public synchronized String getAvailableRequests() throws SQLException {
 		PreparedStatement pstmt,pstmt2,pstmt3;
 		pstmt3 = con.prepareStatement("SELECT * FROM PriceChange");
@@ -722,10 +866,20 @@ public class SQL {
 		return s;
 
 	}
+	/**
+	 * requests all of the orders as a resultset
+	 * @return resultset of all the orders
+	 * @throws SQLException
+	 */
 	public synchronized ResultSet getorders() throws SQLException{
 		PreparedStatement pstmt = con.prepareStatement("SELECT * FROM ParkingOrders");
 		return pstmt.executeQuery();
 	}
+	/**
+	 * requests the database to set that a certain order was notified 
+	 * @param orderid id of order
+	 * @throws SQLException
+	 */
 	public void setnotified(String orderid) throws SQLException {
 		PreparedStatement pstmt;
 		pstmt = con.prepareStatement("UPDATE ParkingOrders"
@@ -734,6 +888,12 @@ public class SQL {
 		pstmt.setString(1, orderid);
 		pstmt.executeUpdate();
 	}
+	/**
+	 * requests the database to set a new price for a given order
+	 * @param orderid id of order
+	 * @param price new price of order
+	 * @throws SQLException
+	 */
 	public void setprice(String orderid , float price) throws SQLException {
 		PreparedStatement pstmt;
 		pstmt = con.prepareStatement("UPDATE ParkingOrders"
@@ -743,6 +903,11 @@ public class SQL {
 		pstmt.setString(2, orderid);
 		pstmt.executeUpdate();
 	}
+	/**
+	 * deletes a certain order from the database
+	 * @param orderid id of order
+	 * @throws SQLException
+	 */
 	public void deleteorder(String orderid) throws SQLException {
 		PreparedStatement pstmt = con.prepareStatement("DELETE FROM ParkingOrders "+ 
 				"WHERE ID=?");
@@ -750,6 +915,14 @@ public class SQL {
 		pstmt.executeUpdate();
 		
 	}
+	/**
+	 * requests to change the price of the certain parking type 
+	 * @param str1 parkingtype 
+	 * @param str2 new price
+	 * @param str3 parkingtype again
+	 * @return
+	 * @throws SQLException
+	 */
 	public synchronized String changePrice(String str1,String str2,String str3) throws SQLException {
 		PreparedStatement pstmt,pstmt2;
 		pstmt = con.prepareStatement("UPDATE Prices"
@@ -765,6 +938,12 @@ public class SQL {
 		pstmt2.executeUpdate();
 		return "accepted";
 	}
+	/**
+	 * requests to delete a certain price change requests from the database
+	 * @param str1 the id of the certain request
+	 * @return returns "accepted" if successful
+	 * @throws SQLException
+	 */
 	public synchronized String deleteprice(String str1) throws SQLException {
 		PreparedStatement pstmt2;
 		pstmt2 = con.prepareStatement("DELETE FROM PriceChange "+ 
@@ -773,7 +952,11 @@ public class SQL {
 		pstmt2.executeUpdate();
 		return "accepted";
 	}
-	
+	/**
+	 * requests the database to return all of the orders of a certain user
+	 * @param str1 username of user
+	 * @return string[][] ,String[i]=id,leavetime,arrivetime,mall,price
+	 */
 	public synchronized String[][] getUserOrders(String str1) {
 		// TODO Auto-generated method stub
 		//		stmt = con.createStatement();
@@ -811,6 +994,11 @@ public class SQL {
 		return null;
 		//		System.out.println("results is:"+result);
 	}
+	/**
+	 * requests the database to return the state of the parkingspots in the given mall
+	 * @param mallname name of given mall
+	 * @return String[][] String[i]=usnername,carid,spot
+	 */
 	public String[][] getparkingspots(String mallname) {
 		try{
 			PreparedStatement pstmt;
